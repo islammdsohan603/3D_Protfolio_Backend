@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 import Contact from "../models/Contact.js";
+import connectDB from "../db/MongoDB.js";
 export const handleContactSubmission = async (req, res) => {
     try {
+        await connectDB();
         const { name, email, subject, message } = req.body;
         // 1. Validate incoming payload
         if (!name || typeof name !== "string" || !name.trim()) {

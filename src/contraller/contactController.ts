@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import nodemailer from "nodemailer";
 import Contact from "../models/Contact.js";
+import connectDB from "../db/MongoDB.js";
 
 export const handleContactSubmission = async (req: Request, res: Response): Promise<void> => {
   try {
+    await connectDB();
     const { name, email, subject, message } = req.body;
 
     // 1. Validate incoming payload

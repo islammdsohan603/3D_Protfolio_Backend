@@ -1,11 +1,8 @@
+import "dotenv/config";
 import express, { Request, Response } from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import connectDB from "./db/MongoDB.js";
 import { handleContactSubmission } from "./contraller/contactController.js";
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -13,22 +10,27 @@ const PORT = process.env.PORT || 5000;
 // Connect to MongoDB
 connectDB();
 
-// Robust CORS Middleware configuration
-const clientUrl = process.env.CLIENT_URL;
+// CORS Configuration
+const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 const allowedOrigins = [
   clientUrl,
-   
-  
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or Postman) or matching origins
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (curl, postman, server-to-server) or listed origins
+      if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
         callback(null, true);
       } else {
-        callback(null, true); // Fallback for dev flexibility
+        // Also allow vercel.app domains if needed
+        if (origin.endsWith(".vercel.app")) {
+          callback(null, true);
+        } else {
+          callback(null, true);
+        }
       }
     },
     credentials: true,
