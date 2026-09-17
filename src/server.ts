@@ -48,9 +48,11 @@ app.get("/api/health", (_req: Request, res: Response) => {
 });
 
 // Start Express Server
-app.listen(PORT, () => {
-  console.log(`[Server] Express backend server running on port ${PORT}`);
-  console.log(`[Server] Configured CORS allowed origin: ${clientUrl}`);
-});
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`[Server] Express backend server running on port ${PORT}`);
+    console.log(`[Server] Configured CORS allowed origin: ${clientUrl}`);
+  });
+}
 
 export default app;
