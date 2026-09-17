@@ -14,10 +14,10 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 // Robust CORS Middleware configuration
-const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
+const clientUrl = process.env.CLIENT_URL;
 const allowedOrigins = [
   clientUrl,
-  "http://localhost:3000",
+   
   
 ];
 
@@ -41,6 +41,11 @@ app.use(express.json());
 
 // Routes
 app.post("/api/contact", handleContactSubmission);
+
+// roote route
+app.get("/", (_req: Request, res: Response) => {
+  res.send("Backend server is running successfully!");
+});
 
 // Health check endpoint
 app.get("/api/health", (_req: Request, res: Response) => {
